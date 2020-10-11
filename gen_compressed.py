@@ -10,10 +10,11 @@ audio_layout = ("maj3", "oct", "maj5", "mono", "mono", "mono", "mono", "mono", "
 vcg.generate_video(
     total_duration_s=15,
     vcodec="h264",
-    acodec="mp3",
+    acodec="aac",
     frame_width=1280,
     frame_height=720,
     audio_track_layout=audio_layout,
     use_faststart=True,
     num_extra_circles=6,
+    quicktime_support=True,
 )

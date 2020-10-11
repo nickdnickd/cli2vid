@@ -60,10 +60,12 @@ def make_frame(
                 int((height / 2) + (direction_y * pos * height / 2)),
             )
 
-            radius = (width / 2) * abs(math.sin(2 * math.pi * (t * pos) / float(total_time_s)))
+            radius = (width / 2) * abs(
+                math.sin(2 * math.pi * (t * pos) / float(total_time_s))
+            )
             circle = gizeh.circle(radius, xy=this_xy, fill=extra_fill)
             circle.draw(surface)
-    
+
     npimage = surface.get_npimage()
 
     # add light noise
@@ -86,8 +88,7 @@ def generate_audio_track_files(
     T=DEFAULT_DURATION_S,
     track_layout: Optional[Tuple[str, ...]] = None,
 ):
-    """Generates temporary wav files and returns their locations.
-    """
+    """Generates temporary wav files and returns their locations."""
     import numpy as np
     import wavio
 
@@ -110,7 +111,7 @@ def generate_audio_track_files(
     if track_layout:
         tracks = track_layout
     else:
-        return [], [] #  tracks = ("maj3", "sil", "maj5", "maj3", "bass", "oct")
+        return [], []  #  tracks = ("maj3", "sil", "maj5", "maj3", "bass", "oct")
 
     written_files = []
 
@@ -176,6 +177,7 @@ def generate_video(
     use_faststart: bool = False,
     use_hapq: bool = False,
     num_extra_circles: int = 0,
+    quicktime_support: bool = False,
 ):
 
     # Generate the unique information
@@ -243,6 +245,13 @@ def generate_video(
         ffmpeg_params = ["-format", "hap_q"]
     else:
         ffmpeg_params = []
+
+    if quicktime_support:
+
+        if not ffmpeg_params:
+            ffmpeg_params = []
+
+        ffmpeg_params.extend(["-pix_fmt", "yuv420p"])
 
     video.write_videofile(
         video_track_file, codec=vcodec, fps=framerate, ffmpeg_params=ffmpeg_params
